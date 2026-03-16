@@ -1,0 +1,36 @@
+---
+description: J.Crew scraping patterns and image classification
+globs: src/lib/scraper.ts, src/app/api/scrape*/route.ts
+alwaysApply: false
+---
+
+# J.Crew Scraping
+
+## Product Pages
+- Product data lives in `#__NEXT_DATA__` as JSON under `props.initialState.products.productsByProductCode`
+- Product name: `productsByProductCode[code].productName`
+- Price: `productsByProductCode[code].colorsList[0].price.formatted`
+- Fallback to `<meta property="og:title">` and `<meta property="product:price:amount">`
+
+## Gallery Images
+- Container: `[class*="product-gallery-container"]` (class `ProductGallery__product-gallery-container___`)
+- Each image: `RevampedZoomImage__container___` > `.image-wrapper.portrait-mode` > `<img>`
+- Only include images with `s7-img-facade` in the src (filters out marketing/nav images)
+- Normalize to `?hei=1200` and strip `crop` param for full-res
+
+## Image URL Pattern
+`https://www.jcrew.com/s7-img-facade/{productCode}_{colorCode}{suffix}`
+
+| Suffix | Type | Description |
+|--------|------|-------------|
+| (none) | model | Main product shot, model on body |
+| `_m` | model | Model alternate angle |
+| `_ed`, `_edm` | model | Editorial model shot |
+| `_d1`, `_d2`, `_d3` | detail | Close-up / fabric detail |
+| `_flat` | flat | Flat lay |
+| `_sw` | swatch | Color swatch thumbnail (never in gallery) |
+
+## Category Pages
+- Category pages (e.g. `/c/mens_category/sweaters`) have `__NEXT_DATA__` with product URLs
+- Extract via regex: `/"\/p\/[^"]+"/g` from the JSON blob
+- Individual product pages must use full path URLs (not just product codes)

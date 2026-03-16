@@ -1,0 +1,40 @@
+---
+description: Kling V3 video generation via fal.ai
+globs: src/lib/fal.ts, src/app/api/generate-video/route.ts, src/app/api/video-status/route.ts
+alwaysApply: false
+---
+
+# Kling Video Generation (fal.ai)
+
+## API Details
+- Provider: fal.ai (`@fal-ai/client`)
+- Model: `fal-ai/kling-video/o3/standard/reference-to-video`
+- Auth: `FAL_KEY` env var, configured server-side via `fal.config({ credentials })`
+
+## Request Shape
+```typescript
+fal.queue.submit(MODEL_ID, {
+  input: {
+    start_image_url: string,    // first selected image — the opening frame
+    prompt: string,             // fashion walk prompt with @Element1/2/3 refs
+    elements: [                 // all selected images as reference elements
+      { frontal_image_url: string }
+    ],
+    duration: "10",             // 10-second video
+    generate_audio: false,
+    negative_prompt: "blur, distort, low quality, deformed, static, frozen, jerky motion"
+  }
+})
+```
+
+## Polling
+- Use `fal.queue.status(MODEL_ID, { requestId })` to poll
+- Statuses: `IN_QUEUE` → `IN_PROGRESS` → `COMPLETED` | `FAILED`
+- On `COMPLETED`, call `fal.queue.result(MODEL_ID, { requestId })` to get `result.data.video.url`
+- Client polls `/api/video-status` every 5 seconds
+
+## Image Selection Rules
+- First selected image = `start_image_url` (the opening frame)
+- All selected images (including first) become `elements`
+- Default selection: first 3 gallery images in order
+- User can toggle selection before generating

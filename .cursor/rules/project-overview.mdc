@@ -1,0 +1,45 @@
+---
+description: Project overview and architecture for J.Crew Video Generator
+alwaysApply: true
+---
+
+# J.Crew Video Generator
+
+A Next.js 16 app that scrapes J.Crew product pages, generates fashion walk-through videos via Kling AI (fal.ai), and renders a storefront preview with hover-to-video.
+
+## Tech Stack
+- Next.js 16 (App Router, Turbopack), Tailwind CSS v4, TypeScript
+- cheerio for server-side HTML scraping
+- @fal-ai/client for Kling video generation via fal.ai
+- Browser localStorage for persistence (no database)
+
+## Project Structure
+```
+src/
+├── app/
+│   ├── page.tsx                    # Main workflow: URL → Select Images → Generate → Review
+│   ├── preview/page.tsx            # J.Crew-style storefront with hover-to-video cards
+│   ├── test-scrape/page.tsx        # Diagnostic: scrape a category, show image selection for 20 products
+│   ├── api/scrape/route.ts         # POST: scrape a single J.Crew product page
+│   ├── api/scrape-category/route.ts# POST: scrape product URLs from a category page
+│   ├── api/generate-video/route.ts # POST: submit to fal.ai Kling API
+│   └── api/video-status/route.ts   # POST: poll fal.ai for video completion
+├── components/
+│   └── ProductCard.tsx             # E-commerce card with hover crossfade to video
+└── lib/
+    ├── types.ts                    # Shared types: ScrapedProduct, ScrapedImage, Product, VideoJob
+    ├── scraper.ts                  # J.Crew scraping: gallery extraction, image classification
+    ├── fal.ts                      # fal.ai client: Kling O3 video submission + polling
+    └── storage.ts                  # localStorage CRUD for approved products
+```
+
+## Workflow
+1. User pastes a J.Crew product URL
+2. Server scrapes the page, extracts gallery images from `[class*="product-gallery-container"]`
+3. User selects which images to use (first 3 pre-selected)
+4. First selected image = `start_image_url`, all selected = elements
+5. Submits to fal.ai Kling O3, polls for completion
+6. User reviews video, approves → saved to localStorage → shown in storefront preview
+
+## Environment
+- `FAL_KEY` in `.env.local` — fal.ai API key (server-side only)

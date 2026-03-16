@@ -1,0 +1,27 @@
+---
+description: E-commerce storefront preview with hover-to-video
+globs: src/app/preview/page.tsx, src/components/ProductCard.tsx
+alwaysApply: false
+---
+
+# Storefront Preview
+
+## Purpose
+Simulates a J.Crew e-commerce storefront. Approved products appear as cards; hovering over a product image crossfades to an auto-playing video.
+
+## ProductCard Component
+- Props: `Product` (id, title, price, primaryImageUrl, videoUrl)
+- Default state: static product image
+- On `mouseenter`: preload and play the video, crossfade opacity to show video over image
+- On `mouseleave`: pause video, fade back to static image
+- Below the image: product title, price, and "Add to Cart" button (non-functional, for demo)
+
+## Data Flow
+- `preview/page.tsx` reads `Product[]` from localStorage on mount
+- If no products saved, shows an empty state with link back to generator
+- Products are added to localStorage when the user approves a generated video in the main workflow
+
+## Styling
+- CSS Grid: 4 columns on desktop, 2 on mobile
+- Aspect ratio `3:4` for product images (portrait, J.Crew style)
+- Minimal hover effects — the video IS the hover effect

@@ -1,0 +1,32 @@
+---
+description: Next.js and React conventions for this project
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Next.js Conventions
+
+## Version & Config
+- Next.js 16 with App Router — no pages/ directory
+- Turbopack for dev server (`next dev --turbopack`)
+- Tailwind CSS v4 (imported via `@import "tailwindcss"` in `globals.css`)
+
+## API Routes
+- All in `src/app/api/*/route.ts` using route handlers (`POST`, `GET`)
+- Server-side only — never expose `FAL_KEY` to the client
+- Always return `NextResponse.json(...)` with appropriate status codes
+- Handle errors with try/catch and return `{ error: message }` with 500 status
+
+## Client Components
+- Mark with `"use client"` at the top when using hooks or browser APIs
+- `localStorage` access must be guarded — only in `useEffect` or event handlers
+- Use `useState` for workflow step management (`WorkflowStep` type in `types.ts`)
+
+## Styling
+- Tailwind utility classes only — no CSS modules
+- J.Crew-inspired palette: stone/slate backgrounds, black text, minimal accents
+- Custom CSS vars defined in `globals.css` for font families
+
+## No Database
+- All approved product data stored in `localStorage` via `src/lib/storage.ts`
+- Key: `"jcrew-video-products"` — stores `Product[]` as JSON
