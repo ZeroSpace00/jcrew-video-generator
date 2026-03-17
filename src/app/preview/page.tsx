@@ -120,10 +120,9 @@ export default function PreviewPage() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/jcrew-logo.png"
+              src="/jcrew-logo.svg"
               alt="J.Crew"
-              className="h-8"
-              style={{ mixBlendMode: "multiply" }}
+              className="h-6"
             />
           </a>
 
