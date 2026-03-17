@@ -106,9 +106,9 @@ export default function PreviewPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Top Navigation - Black bar */}
-      <header className="bg-stone-900 text-white">
-        <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between h-14">
+      {/* Top Navigation */}
+      <header className="bg-white border-b border-stone-200">
+        <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between h-16">
           {/* Logo */}
           <a
             href="#"
@@ -116,18 +116,23 @@ export default function PreviewPage() {
               e.preventDefault();
               router.push("/");
             }}
-            className="text-2xl tracking-[0.3em] font-serif font-bold flex-shrink-0"
+            className="flex-shrink-0"
           >
-            J.CREW
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/jcrew-logo.svg"
+              alt="J.Crew"
+              className="h-5"
+            />
           </a>
 
           {/* Nav items */}
-          <nav className="hidden lg:flex items-center gap-5 text-xs font-medium tracking-wide">
+          <nav className="hidden lg:flex items-center gap-6 text-[13px] font-medium tracking-wide text-stone-900">
             {NAV_ITEMS.map((item) => (
               <span
                 key={item}
-                className={`cursor-pointer hover:opacity-80 transition-opacity ${
-                  item === "SALE" ? "text-red-400" : ""
+                className={`cursor-pointer hover:underline underline-offset-4 transition-all ${
+                  item === "SALE" ? "text-red-600" : ""
                 }`}
               >
                 {item}
@@ -137,9 +142,9 @@ export default function PreviewPage() {
 
           {/* Right side: search + icons */}
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center bg-white/10 rounded px-3 py-1.5 text-xs text-white/70 gap-2">
+            <div className="hidden md:flex items-center border border-stone-300 rounded-full px-4 py-1.5 text-[13px] text-stone-500 gap-2 min-w-[180px]">
               <svg
-                className="w-3.5 h-3.5"
+                className="w-4 h-4 text-stone-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -155,7 +160,7 @@ export default function PreviewPage() {
             </div>
             {/* Account icon */}
             <svg
-              className="w-5 h-5 cursor-pointer hover:opacity-80"
+              className="w-5 h-5 text-stone-700 cursor-pointer hover:text-stone-900"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -169,7 +174,7 @@ export default function PreviewPage() {
             </svg>
             {/* Cart icon */}
             <svg
-              className="w-5 h-5 cursor-pointer hover:opacity-80"
+              className="w-5 h-5 text-stone-700 cursor-pointer hover:text-stone-900"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
