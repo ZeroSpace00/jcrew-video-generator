@@ -123,6 +123,7 @@ export default function PreviewPage() {
               src="/jcrew-logo.png"
               alt="J.Crew"
               className="h-8"
+              style={{ mixBlendMode: "multiply" }}
             />
           </a>
 
