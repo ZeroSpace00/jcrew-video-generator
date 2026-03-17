@@ -39,6 +39,8 @@ const FILTER_SECTIONS = [
   "Trending",
 ];
 
+const isPreviewOnly = process.env.NEXT_PUBLIC_PREVIEW_ONLY === "true";
+
 export default function PreviewPage() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
@@ -246,22 +248,25 @@ export default function PreviewPage() {
           </div>
 
           <div className="flex items-center gap-4 text-stone-500 text-xs">
-            {/* Admin controls */}
-            <button
-              onClick={() => router.push("/")}
-              className="text-stone-600 hover:text-stone-900 font-medium transition-colors"
-            >
-              + Add Product
-            </button>
-            {products.length > 0 && (
-              <button
-                onClick={handleClearAll}
-                className="text-stone-400 hover:text-red-600 transition-colors"
-              >
-                Clear All
-              </button>
+            {!isPreviewOnly && (
+              <>
+                <button
+                  onClick={() => router.push("/")}
+                  className="text-stone-600 hover:text-stone-900 font-medium transition-colors"
+                >
+                  + Add Product
+                </button>
+                {products.length > 0 && (
+                  <button
+                    onClick={handleClearAll}
+                    className="text-stone-400 hover:text-red-600 transition-colors"
+                  >
+                    Clear All
+                  </button>
+                )}
+                <span className="text-stone-300">|</span>
+              </>
             )}
-            <span className="text-stone-300">|</span>
             <span>
               {products.length} item{products.length !== 1 ? "s" : ""}
             </span>
@@ -329,11 +334,11 @@ export default function PreviewPage() {
                 {products.map((product, index) => (
                   <div
                     key={product.id}
-                    draggable
-                    onDragStart={() => handleDragStart(index)}
-                    onDragOver={(e) => handleDragOver(e, index)}
-                    onDrop={() => handleDrop(index)}
-                    onDragEnd={handleDragEnd}
+                    draggable={!isPreviewOnly}
+                    onDragStart={!isPreviewOnly ? () => handleDragStart(index) : undefined}
+                    onDragOver={!isPreviewOnly ? (e) => handleDragOver(e, index) : undefined}
+                    onDrop={!isPreviewOnly ? () => handleDrop(index) : undefined}
+                    onDragEnd={!isPreviewOnly ? handleDragEnd : undefined}
                     className={`transition-all duration-200 ${
                       dragIndex === index
                         ? "opacity-40 scale-95"
@@ -344,7 +349,7 @@ export default function PreviewPage() {
                   >
                     <ProductCard
                       product={product}
-                      onRemove={handleRemove}
+                      onRemove={!isPreviewOnly ? handleRemove : undefined}
                     />
                   </div>
                 ))}
