@@ -120,9 +120,9 @@ export default function PreviewPage() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/jcrew-logo.svg"
+              src="/jcrew-logo.png"
               alt="J.Crew"
-              className="h-5"
+              className="h-8"
             />
           </a>
 
